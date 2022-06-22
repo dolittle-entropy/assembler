@@ -20,4 +20,6 @@ func init() {
 	root.PersistentFlags().String("logger.format", "console", "The logging format to use, 'json' or 'console'")
 	root.PersistentFlags().String("logger.level", "info", "The logging minimum log level to output")
 	root.AddCommand(serve.Command)
+
+	root.AddCommand(inputCMD)
 }
