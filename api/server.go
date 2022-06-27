@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"dolittle.io/kokk/api/utils"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/knadh/koanf"
@@ -19,6 +20,15 @@ func NewServer(config *koanf.Koanf, logger *zerolog.Logger) (*http.Server, error
 	if err := config.Unmarshal("server", &handler.config); err != nil {
 		return nil, err
 	}
+
+	index, err := utils.NewTemplateHandler("api/index.html", func(r *http.Request) (any, error) {
+		return nil, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	handler.router.Handle("/", index)
 
 	logger.Info().Int("port", handler.config.Port).Msg("API Server configured")
 
