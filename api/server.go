@@ -29,12 +29,15 @@ func NewServer(config *koanf.Koanf, output debug.Repository, logger *zerolog.Log
 		return nil, err
 	}
 
+	conf := NewConfigHandler(config)
+
 	ui, err := debug.NewDebugHandler(output)
 	if err != nil {
 		return nil, err
 	}
 
 	handler.router.Handle("/", index)
+	handler.router.Handle("/config", conf)
 	handler.router.Handle("/debug/", ui)
 
 	logger.Info().Int("port", handler.config.Port).Msg("API Server configured")
