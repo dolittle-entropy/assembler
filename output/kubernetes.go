@@ -1,8 +1,13 @@
 package output
 
 import (
-	"dolittle.io/kokk/resources"
 	"fmt"
+	"path"
+	"regexp"
+	"strings"
+	"time"
+
+	"dolittle.io/kokk/resources"
 	"github.com/knadh/koanf"
 	"github.com/rs/zerolog"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -12,10 +17,6 @@ import (
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/dynamic/dynamicinformer"
-	"path"
-	"regexp"
-	"strings"
-	"time"
 )
 
 type KubernetesOutput struct {

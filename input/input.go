@@ -6,42 +6,39 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+
+	"dolittle.io/kokk/resources"
 )
 
-type Resource struct {
-	Id      string
-	Content string
-}
-
-func ListResources(dir string) ([]Resource, error) {
-	resources := []Resource{}
+func ListResources(dir string) ([]resources.Resource, error) {
+	resourceSlice := []resources.Resource{}
 
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
-		return resources, err
+		return resourceSlice, err
 	}
 
 	for _, file := range files {
 		fmt.Println(file.Name())
 		data, err := os.ReadFile(path.Join(dir, file.Name()))
 		if err != nil {
-			return resources, err
+			return resourceSlice, err
 		}
 		var inputMap map[string]interface{}
 		err = json.Unmarshal(data, &inputMap)
 		if err != nil {
-			return resources, err
+			return resourceSlice, err
 		}
 
 		if err != nil {
-			return resources, err
+			return resourceSlice, err
 		}
-		resource := Resource{
+		resource := resources.Resource{
 			Id:      inputMap["metadata"].(map[string]interface{})["selfLink"].(string),
-			Content: string(data),
+			Content: data,
 		}
-		resources = append(resources, resource)
+		resourceSlice = append(resourceSlice, resource)
 	}
 
-	return resources, nil
+	return resourceSlice, nil
 }

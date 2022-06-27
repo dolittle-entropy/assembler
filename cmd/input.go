@@ -34,7 +34,7 @@ kubectl get deployments -n application-a5e9d95b-417e-cf47-8170-d46a0a395f20 | \
 		for _, resource := range resources {
 			logger.Info().
 				Str("id", resource.Id).
-				Str("content", resource.Content).
+				Str("content", string(resource.Content)).
 				Msg("printed resource")
 		}
 	},
