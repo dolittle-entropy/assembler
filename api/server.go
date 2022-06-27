@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"dolittle.io/kokk/api/debug"
 	"dolittle.io/kokk/api/utils"
 	"fmt"
 	"github.com/google/uuid"
@@ -11,7 +12,7 @@ import (
 	"time"
 )
 
-func NewServer(config *koanf.Koanf, logger *zerolog.Logger) (*http.Server, error) {
+func NewServer(config *koanf.Koanf, output debug.Repository, logger *zerolog.Logger) (*http.Server, error) {
 	handler := apiHandler{
 		router: http.NewServeMux(),
 		logger: logger,
@@ -28,7 +29,13 @@ func NewServer(config *koanf.Koanf, logger *zerolog.Logger) (*http.Server, error
 		return nil, err
 	}
 
+	ui, err := debug.NewDebugHandler(output)
+	if err != nil {
+		return nil, err
+	}
+
 	handler.router.Handle("/", index)
+	handler.router.Handle("/debug/", ui)
 
 	logger.Info().Int("port", handler.config.Port).Msg("API Server configured")
 

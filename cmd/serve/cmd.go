@@ -32,7 +32,7 @@ var Command = &cobra.Command{
 
 		output.List()
 
-		server, err := api.NewServer(config, logger)
+		server, err := api.NewServer(config, output, logger)
 		if err != nil {
 			return err
 		}
