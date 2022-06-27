@@ -24,7 +24,13 @@ var Command = &cobra.Command{
 			return err
 		}
 
-		_, err = output.NewKubernetesOutput(config, dc, rc, logger)
+		output, err := output.NewKubernetesOutput(config, dc, rc, logger)
+		if err != nil {
+			return err
+		}
+
+		output.List()
+
 		return err
 	},
 }
