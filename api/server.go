@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func NewServer(config *koanf.Koanf, output debug.Repository, logger *zerolog.Logger) (*http.Server, error) {
+func NewServer(config *koanf.Koanf, input, output debug.Repository, logger *zerolog.Logger) (*http.Server, error) {
 	handler := apiHandler{
 		router: http.NewServeMux(),
 		logger: logger,
@@ -31,7 +31,7 @@ func NewServer(config *koanf.Koanf, output debug.Repository, logger *zerolog.Log
 
 	conf := NewConfigHandler(config)
 
-	ui, err := debug.NewDebugHandler(output)
+	ui, err := debug.NewDebugHandler(input, output)
 	if err != nil {
 		return nil, err
 	}

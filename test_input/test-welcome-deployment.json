@@ -1,0 +1,424 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "annotations": {
+      "deployment.kubernetes.io/revision": "2",
+      "dolittle.io/application-id": "a5e9d95b-417e-cf47-8170-d46a0a395f20",
+      "dolittle.io/microservice-id": "800e3265-e613-4aab-97ab-75b3248d424d",
+      "dolittle.io/microservice-kind": "simple",
+      "dolittle.io/tenant-id": "4cb310e8-8a8e-48a4-bb81-a8cddb484197"
+    },
+    "creationTimestamp": "2022-04-20T13:16:35Z",
+    "generation": 2,
+    "labels": {
+      "application": "fileshare-creation-test-2",
+      "environment": "Test",
+      "microservice": "Welcome",
+      "tenant": "cli3"
+    },
+    "managedFields": [
+      {
+        "apiVersion": "apps/v1",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:metadata": {
+            "f:annotations": {
+              ".": {},
+              "f:dolittle.io/application-id": {},
+              "f:dolittle.io/microservice-id": {},
+              "f:dolittle.io/microservice-kind": {},
+              "f:dolittle.io/tenant-id": {}
+            },
+            "f:labels": {
+              ".": {},
+              "f:application": {},
+              "f:environment": {},
+              "f:microservice": {},
+              "f:tenant": {}
+            }
+          },
+          "f:spec": {
+            "f:progressDeadlineSeconds": {},
+            "f:replicas": {},
+            "f:revisionHistoryLimit": {},
+            "f:selector": {
+              "f:matchLabels": {
+                ".": {},
+                "f:application": {},
+                "f:environment": {},
+                "f:microservice": {},
+                "f:tenant": {}
+              }
+            },
+            "f:strategy": {
+              "f:rollingUpdate": {
+                ".": {},
+                "f:maxSurge": {},
+                "f:maxUnavailable": {}
+              },
+              "f:type": {}
+            },
+            "f:template": {
+              "f:metadata": {
+                "f:annotations": {
+                  ".": {},
+                  "f:dolittle.io/application-id": {},
+                  "f:dolittle.io/microservice-id": {},
+                  "f:dolittle.io/microservice-kind": {},
+                  "f:dolittle.io/tenant-id": {}
+                },
+                "f:labels": {
+                  ".": {},
+                  "f:application": {},
+                  "f:environment": {},
+                  "f:microservice": {},
+                  "f:tenant": {}
+                }
+              },
+              "f:spec": {
+                "f:containers": {
+                  "k:{\"name\":\"head\"}": {
+                    ".": {},
+                    "f:envFrom": {},
+                    "f:image": {},
+                    "f:imagePullPolicy": {},
+                    "f:name": {},
+                    "f:ports": {
+                      ".": {},
+                      "k:{\"containerPort\":80,\"protocol\":\"TCP\"}": {
+                        ".": {},
+                        "f:containerPort": {},
+                        "f:name": {},
+                        "f:protocol": {}
+                      }
+                    },
+                    "f:resources": {},
+                    "f:terminationMessagePath": {},
+                    "f:terminationMessagePolicy": {},
+                    "f:volumeMounts": {
+                      ".": {},
+                      "k:{\"mountPath\":\"/app/.dolittle/clients.json\"}": {
+                        ".": {},
+                        "f:mountPath": {},
+                        "f:name": {},
+                        "f:subPath": {}
+                      },
+                      "k:{\"mountPath\":\"/app/.dolittle/event-horizons.json\"}": {
+                        ".": {},
+                        "f:mountPath": {},
+                        "f:name": {},
+                        "f:subPath": {}
+                      },
+                      "k:{\"mountPath\":\"/app/.dolittle/resources.json\"}": {
+                        ".": {},
+                        "f:mountPath": {},
+                        "f:name": {},
+                        "f:subPath": {}
+                      },
+                      "k:{\"mountPath\":\"/app/.dolittle/tenants.json\"}": {
+                        ".": {},
+                        "f:mountPath": {},
+                        "f:name": {},
+                        "f:subPath": {}
+                      },
+                      "k:{\"mountPath\":\"/app/data\"}": {
+                        ".": {},
+                        "f:mountPath": {},
+                        "f:name": {}
+                      }
+                    }
+                  }
+                },
+                "f:dnsPolicy": {},
+                "f:imagePullSecrets": {
+                  ".": {},
+                  "k:{\"name\":\"acr\"}": {
+                    ".": {},
+                    "f:name": {}
+                  }
+                },
+                "f:restartPolicy": {},
+                "f:schedulerName": {},
+                "f:securityContext": {},
+                "f:terminationGracePeriodSeconds": {},
+                "f:volumes": {
+                  ".": {},
+                  "k:{\"name\":\"config-files\"}": {
+                    ".": {},
+                    "f:configMap": {
+                      ".": {},
+                      "f:defaultMode": {},
+                      "f:name": {}
+                    },
+                    "f:name": {}
+                  },
+                  "k:{\"name\":\"dolittle-config\"}": {
+                    ".": {},
+                    "f:configMap": {
+                      ".": {},
+                      "f:defaultMode": {},
+                      "f:name": {}
+                    },
+                    "f:name": {}
+                  },
+                  "k:{\"name\":\"tenants-config\"}": {
+                    ".": {},
+                    "f:configMap": {
+                      ".": {},
+                      "f:defaultMode": {},
+                      "f:name": {}
+                    },
+                    "f:name": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "manager": "app",
+        "operation": "Update",
+        "time": "2022-04-20T13:16:35Z"
+      },
+      {
+        "apiVersion": "apps/v1",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:spec": {
+            "f:template": {
+              "f:spec": {
+                "f:containers": {
+                  "k:{\"name\":\"head\"}": {
+                    "f:resources": {
+                      "f:limits": {
+                        ".": {},
+                        "f:cpu": {},
+                        "f:memory": {}
+                      },
+                      "f:requests": {
+                        ".": {},
+                        "f:cpu": {},
+                        "f:memory": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "manager": "kubectl-patch",
+        "operation": "Update",
+        "time": "2022-05-13T16:22:51Z"
+      },
+      {
+        "apiVersion": "apps/v1",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:metadata": {
+            "f:annotations": {
+              "f:deployment.kubernetes.io/revision": {}
+            }
+          },
+          "f:status": {
+            "f:availableReplicas": {},
+            "f:conditions": {
+              ".": {},
+              "k:{\"type\":\"Available\"}": {
+                ".": {},
+                "f:lastTransitionTime": {},
+                "f:lastUpdateTime": {},
+                "f:message": {},
+                "f:reason": {},
+                "f:status": {},
+                "f:type": {}
+              },
+              "k:{\"type\":\"Progressing\"}": {
+                ".": {},
+                "f:lastTransitionTime": {},
+                "f:lastUpdateTime": {},
+                "f:message": {},
+                "f:reason": {},
+                "f:status": {},
+                "f:type": {}
+              }
+            },
+            "f:observedGeneration": {},
+            "f:readyReplicas": {},
+            "f:replicas": {},
+            "f:updatedReplicas": {}
+          }
+        },
+        "manager": "kube-controller-manager",
+        "operation": "Update",
+        "time": "2022-05-13T16:22:57Z"
+      }
+    ],
+    "name": "test-welcome",
+    "namespace": "application-a5e9d95b-417e-cf47-8170-d46a0a395f20",
+    "resourceVersion": "157045881",
+    "selfLink": "/apis/apps/v1/namespaces/application-a5e9d95b-417e-cf47-8170-d46a0a395f20/deployments/test-welcome",
+    "uid": "e46247d7-b913-48a0-b6d4-ee5a1dbf01a6"
+  },
+  "spec": {
+    "progressDeadlineSeconds": 600,
+    "replicas": 1,
+    "revisionHistoryLimit": 10,
+    "selector": {
+      "matchLabels": {
+        "application": "fileshare-creation-test-2",
+        "environment": "Test",
+        "microservice": "Welcome",
+        "tenant": "cli3"
+      }
+    },
+    "strategy": {
+      "rollingUpdate": {
+        "maxSurge": "25%",
+        "maxUnavailable": "25%"
+      },
+      "type": "RollingUpdate"
+    },
+    "template": {
+      "metadata": {
+        "annotations": {
+          "dolittle.io/application-id": "a5e9d95b-417e-cf47-8170-d46a0a395f20",
+          "dolittle.io/microservice-id": "800e3265-e613-4aab-97ab-75b3248d424d",
+          "dolittle.io/microservice-kind": "simple",
+          "dolittle.io/tenant-id": "4cb310e8-8a8e-48a4-bb81-a8cddb484197"
+        },
+        "creationTimestamp": null,
+        "labels": {
+          "application": "fileshare-creation-test-2",
+          "environment": "Test",
+          "microservice": "Welcome",
+          "tenant": "cli3"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "envFrom": [
+              {
+                "configMapRef": {
+                  "name": "test-welcome-env-variables"
+                }
+              },
+              {
+                "secretRef": {
+                  "name": "test-welcome-secret-env-variables"
+                }
+              }
+            ],
+            "image": "nginxdemos/hello:latest",
+            "imagePullPolicy": "Always",
+            "name": "head",
+            "ports": [
+              {
+                "containerPort": 80,
+                "name": "http",
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "25m",
+                "memory": "256Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/app/.dolittle/tenants.json",
+                "name": "tenants-config",
+                "subPath": "tenants.json"
+              },
+              {
+                "mountPath": "/app/.dolittle/resources.json",
+                "name": "dolittle-config",
+                "subPath": "resources.json"
+              },
+              {
+                "mountPath": "/app/.dolittle/clients.json",
+                "name": "dolittle-config",
+                "subPath": "clients.json"
+              },
+              {
+                "mountPath": "/app/.dolittle/event-horizons.json",
+                "name": "dolittle-config",
+                "subPath": "event-horizons.json"
+              },
+              {
+                "mountPath": "/app/data",
+                "name": "config-files"
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "imagePullSecrets": [
+          {
+            "name": "acr"
+          }
+        ],
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "terminationGracePeriodSeconds": 30,
+        "volumes": [
+          {
+            "configMap": {
+              "defaultMode": 420,
+              "name": "test-tenants"
+            },
+            "name": "tenants-config"
+          },
+          {
+            "configMap": {
+              "defaultMode": 420,
+              "name": "test-welcome-dolittle"
+            },
+            "name": "dolittle-config"
+          },
+          {
+            "configMap": {
+              "defaultMode": 420,
+              "name": "test-welcome-config-files"
+            },
+            "name": "config-files"
+          }
+        ]
+      }
+    }
+  },
+  "status": {
+    "availableReplicas": 1,
+    "conditions": [
+      {
+        "lastTransitionTime": "2022-04-20T13:16:42Z",
+        "lastUpdateTime": "2022-04-20T13:16:42Z",
+        "message": "Deployment has minimum availability.",
+        "reason": "MinimumReplicasAvailable",
+        "status": "True",
+        "type": "Available"
+      },
+      {
+        "lastTransitionTime": "2022-04-20T13:16:35Z",
+        "lastUpdateTime": "2022-05-13T16:22:57Z",
+        "message": "ReplicaSet \"test-welcome-d4f6458d9\" has successfully progressed.",
+        "reason": "NewReplicaSetAvailable",
+        "status": "True",
+        "type": "Progressing"
+      }
+    ],
+    "observedGeneration": 2,
+    "readyReplicas": 1,
+    "replicas": 1,
+    "updatedReplicas": 1
+  }
+}

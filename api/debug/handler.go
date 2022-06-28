@@ -8,7 +8,7 @@ import (
 	"sort"
 )
 
-func NewDebugHandler(output Repository) (http.Handler, error) {
+func NewDebugHandler(input, output Repository) (http.Handler, error) {
 	handler := http.NewServeMux()
 
 	list, err := utils.NewTemplateHandler("api/debug/list.html", func(r *http.Request) (any, error) {
@@ -29,19 +29,29 @@ func NewDebugHandler(output Repository) (http.Handler, error) {
 
 	view, err := utils.NewTemplateHandler("api/debug/view.html", func(r *http.Request) (any, error) {
 		resourceID := r.URL.Path
-		resource, err := output.Get(resourceID)
-		if err != nil {
-			return nil, err
+
+		inputContent := ""
+		if resource, err := input.Get(resourceID); err == nil {
+			var pretty bytes.Buffer
+			if err := json.Indent(&pretty, resource.Content, "", "  "); err != nil {
+				return nil, err
+			}
+			inputContent = pretty.String()
 		}
 
-		var pretty bytes.Buffer
-		if err := json.Indent(&pretty, resource.Content, "", "  "); err != nil {
-			return nil, err
+		outputContent := ""
+		if resource, err := output.Get(resourceID); err == nil {
+			var pretty bytes.Buffer
+			if err := json.Indent(&pretty, resource.Content, "", "  "); err != nil {
+				return nil, err
+			}
+			outputContent = pretty.String()
 		}
 
 		return viewData{
-			ID:      resource.Id,
-			Content: pretty.String(),
+			ID:            resourceID,
+			InputContent:  inputContent,
+			OutputContent: outputContent,
 		}, nil
 	})
 	if err != nil {
@@ -60,6 +70,7 @@ type listData struct {
 }
 
 type viewData struct {
-	ID      string
-	Content string
+	ID            string
+	InputContent  string
+	OutputContent string
 }
