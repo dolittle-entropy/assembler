@@ -1,6 +1,7 @@
 package serve
 
 import (
+	"dolittle.io/kokk/api"
 	"dolittle.io/kokk/config"
 	"dolittle.io/kokk/kubernetes"
 	"dolittle.io/kokk/output"
@@ -31,11 +32,17 @@ var Command = &cobra.Command{
 
 		output.List()
 
-		return err
+		server, err := api.NewServer(config, output, logger)
+		if err != nil {
+			return err
+		}
+
+		return server.ListenAndServe()
 	},
 }
 
 func init() {
+	Command.Flags().Int("server.port", 8080, "The port to listen to")
 	Command.Flags().StringSlice("kubernetes.resources", []string{"Namespace", "Deployment"}, "The Kubernetes resource types to operate on")
 	Command.Flags().Int("kubernetes.resync", 60, "The Kubernetes informer resync interval")
 }
