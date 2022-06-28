@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Debug List</title>
+    </head>
+    <body>
+        <h1>All monitored resources:</h1>
+        <ol>
+            {{range .IDs}}
+                <li><a href="/debug/view/{{ .  }}">{{ . }}</a></li>
+            {{end}}
+        </ol>
+    </body>
+</html>
