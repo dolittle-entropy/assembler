@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog"
 	"io/ioutil"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/apimachinery/pkg/util/json"
+	"k8s.io/apimachinery/pkg/util/yaml"
 	"os"
 	"path"
 )
@@ -82,7 +82,7 @@ func (di *DirectoryInput) onFileUpdated(name string) {
 	}
 
 	resource := unstructured.Unstructured{}
-	if err := json.Unmarshal(contents, &resource.Object); err != nil {
+	if err := yaml.Unmarshal(contents, &resource.Object); err != nil {
 		logger.Error().Err(err).Msg("Could not parse input file as Unstructured")
 		return
 	}
@@ -94,6 +94,13 @@ func (di *DirectoryInput) onFileUpdated(name string) {
 	if err != nil {
 		logger.Error().Err(err).Msg("Failed to convert resource")
 		return
+	}
+
+	if _, exists := di.repository[converted.Id]; exists {
+		if di.fileIDs[name] != converted.Id {
+			logger.Warn().Str("id", converted.Id).Msg("Resource already described in another file, skipping")
+			return
+		}
 	}
 
 	di.repository[converted.Id] = *converted

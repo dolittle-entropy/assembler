@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    dolittle.io/application-id: a5e9d95b-417e-cf47-8170-d46a0a395f20
+    dolittle.io/microservice-id: bcda0b8a-58d2-4ea5-983b-ce0130d023ef
+    dolittle.io/microservice-kind: simple
+    dolittle.io/tenant-id: 4cb310e8-8a8e-48a4-bb81-a8cddb484197
+  labels:
+    application: fileshare-creation-test-2
+    environment: Dev
+    microservice: Welcome
+    tenant: cli3
+  name: dev-welcome
+  namespace: application-a5e9d95b-417e-cf47-8170-d46a0a395f20
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: fileshare-creation-test-2
+      environment: Dev
+      microservice: Welcome
+      tenant: cli3
+  template:
+    metadata:
+      annotations:
+        dolittle.io/application-id: a5e9d95b-417e-cf47-8170-d46a0a395f20
+        dolittle.io/microservice-id: bcda0b8a-58d2-4ea5-983b-ce0130d023ef
+        dolittle.io/microservice-kind: simple
+        dolittle.io/tenant-id: 4cb310e8-8a8e-48a4-bb81-a8cddb484197
+      labels:
+        application: fileshare-creation-test-2
+        environment: Dev
+        microservice: Welcome
+        tenant: cli3
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: dev-welcome-env-variables
+            - secretRef:
+                name: dev-welcome-secret-env-variables
+          image: nginxdemos/hello:latest
+          imagePullPolicy: Always
+          name: head
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "2"
+              memory: 1Gi
+            requests:
+              cpu: 25m
+              memory: 256Mi
+          volumeMounts:
+            - mountPath: /app/.dolittle/tenants.json
+              name: tenants-config
+              subPath: tenants.json
+            - mountPath: /app/.dolittle/resources.json
+              name: dolittle-config
+              subPath: resources.json
+            - mountPath: /app/.dolittle/clients.json
+              name: dolittle-config
+              subPath: clients.json
+            - mountPath: /app/.dolittle/event-horizons.json
+              name: dolittle-config
+              subPath: event-horizons.json
+            - mountPath: /app/data
+              name: config-files
+      imagePullSecrets:
+        - name: acr
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: dev-tenants
+          name: tenants-config
+        - configMap:
+            defaultMode: 420
+            name: dev-welcome-dolittle
+          name: dolittle-config
+        - configMap:
+            defaultMode: 420
+            name: dev-welcome-config-files
+          name: config-files
