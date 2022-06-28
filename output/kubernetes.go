@@ -226,7 +226,7 @@ func (k *kubernetesOutputResourceEventHandler) getResourceId(resource *unstructu
 
 	if k.resource.namespaced {
 		if group == "" {
-			return path.Join(version, "namespaces", resource.GetNamespace(), resourceType, resource.GetName())
+			return path.Join(vErsion, "namespaces", resource.GetNamespace(), resourceType, resource.GetName())
 		}
 		return path.Join(group, version, "namespaces", resource.GetNamespace(), resourceType, resource.GetName())
 	}
