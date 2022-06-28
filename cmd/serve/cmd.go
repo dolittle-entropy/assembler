@@ -26,7 +26,14 @@ var Command = &cobra.Command{
 			return err
 		}
 
-		output, err := output.NewKubernetesOutput(config, dc, rc, logger)
+		types, err := kubernetes.NewDiscoveredTypes(config, rc, logger)
+		if err != nil {
+			return err
+		}
+
+		converter := kubernetes.NewResourceConverter(types)
+
+		output, err := output.NewKubernetesOutput(config, types, converter, dc, logger)
 		if err != nil {
 			return err
 		}
