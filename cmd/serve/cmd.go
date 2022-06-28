@@ -38,12 +38,12 @@ var Command = &cobra.Command{
 			return err
 		}
 
-		_, err = input.NewDirectoryInput(config, logger)
+		input, err := input.NewDirectoryInput(config, converter, logger)
 		if err != nil {
 			return err
 		}
 
-		server, err := api.NewServer(config, output, logger)
+		server, err := api.NewServer(config, input, output, logger)
 		if err != nil {
 			return err
 		}

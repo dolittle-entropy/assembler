@@ -1,7 +1,7 @@
 package input
 
 import (
-	"fmt"
+	"dolittle.io/kokk/resources"
 	"github.com/fsnotify/fsnotify"
 	"github.com/knadh/koanf"
 	"github.com/rs/zerolog"
@@ -12,13 +12,20 @@ import (
 	"path"
 )
 
-type DirectoryInput struct {
-	path    string
-	watcher *fsnotify.Watcher
-	logger  *zerolog.Logger
+type TypeConverter interface {
+	Convert(object *unstructured.Unstructured) (*resources.Resource, error)
 }
 
-func NewDirectoryInput(config *koanf.Koanf, logger *zerolog.Logger) (*DirectoryInput, error) {
+type DirectoryInput struct {
+	path       string
+	watcher    *fsnotify.Watcher
+	converter  TypeConverter
+	repository map[string]resources.Resource
+	fileIDs    map[string]string
+	logger     *zerolog.Logger
+}
+
+func NewDirectoryInput(config *koanf.Koanf, converter TypeConverter, logger *zerolog.Logger) (*DirectoryInput, error) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		return nil, err
@@ -32,9 +39,12 @@ func NewDirectoryInput(config *koanf.Koanf, logger *zerolog.Logger) (*DirectoryI
 	loggerWithPath := logger.With().Str("path", path).Logger()
 
 	input := &DirectoryInput{
-		path:    path,
-		watcher: watcher,
-		logger:  &loggerWithPath,
+		path:       path,
+		watcher:    watcher,
+		converter:  converter,
+		repository: make(map[string]resources.Resource),
+		fileIDs:    make(map[string]string),
+		logger:     &loggerWithPath,
 	}
 
 	go input.listenForChanges()
@@ -46,8 +56,24 @@ func NewDirectoryInput(config *koanf.Koanf, logger *zerolog.Logger) (*DirectoryI
 	return input, nil
 }
 
+func (di *DirectoryInput) Get(id string) (*resources.Resource, error) {
+	if resource, found := di.repository[id]; found {
+		return &resource, nil
+	}
+
+	return nil, ResourceNotFound
+}
+
+func (di *DirectoryInput) List() []resources.Resource {
+	list := make([]resources.Resource, 0, len(di.repository))
+	for _, resource := range di.repository {
+		list = append(list, resource)
+	}
+	return list
+}
+
 func (di *DirectoryInput) onFileUpdated(name string) {
-	logger := di.logger.With().Str("file", name).Logger()
+	logger := di.logger.With().Str("method", "onFileUpdated").Str("file", name).Logger()
 
 	contents, err := os.ReadFile(name)
 	if err != nil {
@@ -55,17 +81,38 @@ func (di *DirectoryInput) onFileUpdated(name string) {
 		return
 	}
 
-	data := unstructured.Unstructured{}
-	if err := json.Unmarshal(contents, &data.Object); err != nil {
+	resource := unstructured.Unstructured{}
+	if err := json.Unmarshal(contents, &resource.Object); err != nil {
 		logger.Error().Err(err).Msg("Could not parse input file as Unstructured")
 		return
 	}
 
-	fmt.Println(data.GetName(), data.GetNamespace())
+	gvk := resource.GroupVersionKind()
+	logger = logger.With().Str("group", gvk.Group).Str("version", gvk.Version).Str("kind", gvk.Kind).Logger()
+
+	converted, err := di.converter.Convert(&resource)
+	if err != nil {
+		logger.Error().Err(err).Msg("Failed to convert resource")
+		return
+	}
+
+	di.repository[converted.Id] = *converted
+	di.fileIDs[name] = converted.Id
+	logger.Trace().Str("id", converted.Id).Msg("Added resource to repository")
 }
 
 func (di *DirectoryInput) onFileRemoved(name string) {
+	logger := di.logger.With().Str("method", "onFileUpdated").Str("file", name).Logger()
 
+	id, found := di.fileIDs[name]
+	if !found {
+		logger.Warn().Msg("File was not already loaded, ignoring")
+		return
+	}
+
+	delete(di.repository, id)
+	delete(di.fileIDs, id)
+	logger.Trace().Str("id", id).Msg("Removed resource from repository")
 }
 
 func (di *DirectoryInput) listenForChanges() {

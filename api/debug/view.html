@@ -5,6 +5,11 @@
     </head>
     <body>
         <h1>{{ .ID }}</h1>
-        <pre>{{ .Content }}</pre>
+        <div style="display: grid; grid-template-columns: 1fr 1fr;">
+            <h2>Input</h2>
+            <h2>Output</h2>
+            <pre>{{ .InputContent }}</pre>
+            <pre>{{ .OutputContent }}</pre>
+        </div>
     </body>
 </html>
